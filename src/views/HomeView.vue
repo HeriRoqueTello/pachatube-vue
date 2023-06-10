@@ -73,7 +73,8 @@
             }
         })
             .catch(error => {
-            console.error(error);
+              this.loading = false;
+              console.error(error);
         });
       },
       eliminarDato(idVideo) {
