@@ -5,7 +5,7 @@
     <Loading class="mt-8" v-if="loading" />
     <form v-if="!loading" @submit.prevent="enviarEdicion" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 w-2/3">
       <input class="py-3 px-4 border-cyan-400 text-black" type="text" v-model="title" placeholder="Titulo del video" required>
-      <input class="py-3 px-4 border-cyan-400 text-black" type="text" v-model="url" placeholder="Identificador del video (Ejemplo: ccvBbckRffc)" required>
+      <input class="py-3 px-4 border-cyan-400 text-black" type="text" v-model="url" placeholder="Identificador del video o la url (Ejemplo: ccvBbckRffc)" required>
       <textarea class="md:col-span-2 p-4 resize-none text-black" v-model="description" cols="30" rows="10" placeholder="Descripcion del video" required></textarea>
       <div class="md:col-span-2 flex flex-col gap-2 md:gap-0 md:flex-row justify-evenly">
           <button type="submit" class="px-8 py-2 bg-[#FF5252] text-white">Guardar</button>
@@ -54,7 +54,7 @@
       enviarEdicion() {
         const data = {
           title: this.title,
-          url: this.url,
+          url: this.url.slice(-11),
           description: this.description,
         };
 
