@@ -1,10 +1,11 @@
 <template>
   <main class="flex flex-col justify-center items-center p-8" :class="{ 'h-[calc(100vh-68px)]': videos.length === 0}">
+    <Loading v-if="loading" />
     <h2 class="self-start text-4xl mb-4" v-if="videos.length !== 0">Lista de videos</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <Card v-for="video in videos" :id="video.id" :key="video.id" :title="video.title" :url="video.url" :description="video.description" @custom-event="abrirModalEliminar"/>
     </div>
-    <RouterLink v-if="videos.length === 0" to="/crear">
+    <RouterLink v-if="videos.length === 0 & !loading" to="/crear">
       <button class="px-5 py-2 bg-[#FF5252] text-white font-bold">Crear Video</button>
     </RouterLink>
   </main>
@@ -35,9 +36,11 @@
 <script>
   import axios from 'axios'
   import Card from '../components/Card.vue';
+  import Loading from '../components/Loading.vue';
   export default {
     components: {
       Card,
+      Loading
     },
     props: {
       toggle: {
@@ -49,7 +52,8 @@
       return {
         videos: [],
         eliminarId: null, // ID del elemento a eliminar
-        mostrarModal: false // Controla la hidden del modal
+        mostrarModal: false, // Controla la hidden del modal
+        loading: true,
       };
     },
     created() {
@@ -63,6 +67,7 @@
             // Cargar los datos existentes en las propiedades de datos de Vue
             console.log(response.data);
             this.videos = response.data;
+            this.loading = false;
             if(this.videos.length !== 0){
               this.toggle()
             }

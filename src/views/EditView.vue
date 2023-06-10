@@ -2,7 +2,8 @@
   <div class="grid grid-cols-1 h-[calc(100vh-68px)] justify-items-center content-center">
     <h2 class="text-3xl font-bold mb-4 text-left">Editar video | ID: {{ $route.params.id }}</h2>
     <hr class="text-white border-t-2 w-full">
-    <form @submit.prevent="enviarEdicion" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 w-2/3">
+    <Loading class="mt-8" v-if="loading" />
+    <form v-if="!loading" @submit.prevent="enviarEdicion" class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 w-2/3">
       <input class="py-3 px-4 border-cyan-400 text-black" type="text" v-model="title" placeholder="Titulo del video" required>
       <input class="py-3 px-4 border-cyan-400 text-black" type="text" v-model="url" placeholder="Identificador del video (Ejemplo: ccvBbckRffc)" required>
       <textarea class="md:col-span-2 p-4 resize-none text-black" v-model="description" cols="30" rows="10" placeholder="Descripcion del video" required></textarea>
@@ -18,14 +19,18 @@
 
 <script>
   import axios from 'axios'
+  import Loading from '../components/Loading.vue'
   export default {
-
+    components: {
+      Loading
+    },
     data() {
       return {
         id: this.$route.params.id, // ID del elemento a editar
         title: '',
         url: '',
-        description: ''
+        description: '',
+        loading: true
       };
     },
     created() {
@@ -39,6 +44,7 @@
             this.title = response.data.title;
             this.url = response.data.url;
             this.description = response.data.description;
+            this.loading = false;
           })
           .catch(error => {
             this.$router.push('/')
